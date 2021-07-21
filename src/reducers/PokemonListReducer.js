@@ -7,11 +7,12 @@ const PokemonReducer = (state = initialState, action) => {
 				...state,
 				data: action.payload.results,
 				count: action.payload.count,
+				loading: false,
 			};
 		case 'LOADING':
 			return { ...state, loading: true };
 		case 'FAIL':
-			return { ...state, error: action.payload };
+			return { ...state, error: action.payload, loading: false };
 		default:
 			return state;
 	}

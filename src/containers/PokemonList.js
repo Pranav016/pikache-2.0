@@ -1,5 +1,6 @@
 import _ from 'lodash';
 import React, { useEffect, useState } from 'react';
+import ReactPaginate from 'react-paginate';
 import { useDispatch, useSelector } from 'react-redux';
 import { Link } from 'react-router-dom';
 import { getPokemonList } from '../actions/PokemonActions';
@@ -17,6 +18,10 @@ const PokemonList = (props) => {
 	}, []);
 
 	const showData = () => {
+		if (PokemonList.loading) {
+			return <p>Loading...</p>;
+		}
+
 		if (!_.isEmpty(PokemonList.data)) {
 			return (
 				<div className='list-wrapper'>
@@ -28,10 +33,6 @@ const PokemonList = (props) => {
 					))}
 				</div>
 			);
-		}
-
-		if (PokemonList.loading) {
-			return <p>Loading...</p>;
 		}
 
 		if (PokemonList.error !== '') {
@@ -55,6 +56,15 @@ const PokemonList = (props) => {
 				</button>
 			</div>
 			{showData()}
+			{!_.isEmpty(PokemonList.data) && (
+				<ReactPaginate
+					pageCount={Math.ceil(PokemonList.count / 15)}
+					pageRangeDisplayed={2}
+					marginPagesDisplayed={1}
+					onPageChange={(data) => fetchData(data.selected + 1)}
+					containerClassName={'pagination'}
+				/>
+			)}
 		</div>
 	);
 };
